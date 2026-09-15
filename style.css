@@ -1,6 +1,7 @@
 /* Smooth Scrolling */
 html {
   scroll-behavior: smooth;
+  font-size: 90%;
 }
 
 /* Toast Animation */
