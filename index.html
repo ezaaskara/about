@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="id" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Eza Askara</title>
+  
+  <!-- Google Fonts: Montserrat (Headings) & Lora (Body/Tagline) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,600&family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Montserrat', 'sans-serif'],
+            serif: ['Lora', 'serif'],
+          }
+        }
+      }
+    }
+  </script>
+  
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="min-h-screen transition-colors duration-300 font-sans selection:bg-neutral-800 selection:text-white dark:selection:bg-neutral-200 dark:selection:text-black bg-neutral-50 text-neutral-900 dark:bg-black dark:text-neutral-100">
+
+  <!-- Next.js Subtle Grid Pattern Overlay -->
+  <div class="fixed inset-0 pointer-events-none opacity-[0.03] dark:opacity-[0.07] z-0 bg-[radial-gradient(#888_1px,transparent_1px)] [background-size:16px_16px]"></div>
+
+  <!-- Toast Notification for Share / Clipboard Copy -->
+  <div id="toast" class="hidden fixed bottom-6 right-6 z-50 items-center gap-2 bg-neutral-900 dark:bg-neutral-100 text-white dark:text-black px-4 py-3 rounded-lg shadow-2xl text-sm font-medium animate-toast border border-neutral-700 dark:border-neutral-300">
+    <svg class="w-4 h-4 text-emerald-400 dark:text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+    </svg>
+    <span>Tautan berhasil disalin ke clipboard!</span>
+  </div>
+
+  <!-- HEADER SECTION -->
+  <header class="sticky top-0 z-40 backdrop-blur-md border-b transition-colors duration-300 bg-white/80 border-neutral-200 dark:bg-black/80 dark:border-neutral-800">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+      
+      <!-- Header Left: Profile Picture & Title -->
+      <a href="#home" onclick="scrollToSection(event, 'home')" class="flex items-center gap-3 group">
+        <div class="relative w-9 h-9 rounded-full overflow-hidden border border-neutral-300 dark:border-neutral-700 group-hover:scale-105 transition-transform duration-200">
+          <img 
+            src="https://raw.githubusercontent.com/ezjaa/portfolio/refs/heads/main/public/foto_profile.webp" 
+            alt="Eza Askara Profile" 
+            class="w-full h-full object-cover"
+            loading="eager"
+            onerror="this.src='https://placehold.co/100x100/222/fff?text=EA'"
+          />
+        </div>
+        <span class="font-extrabold text-lg tracking-tight group-hover:opacity-80 transition-opacity font-sans">
+          Eza Askara
+        </span>
+      </a>
+
+      <!-- Desktop Navigation Links -->
+      <nav class="hidden md:flex items-center gap-8 text-sm font-medium tracking-wide">
+        <a href="#home" onclick="scrollToSection(event, 'home')" id="nav-home" class="nav-link capitalize transition-colors text-black dark:text-white font-semibold hover:text-black dark:hover:text-white">
+          Home
+        </a>
+        <a href="#follow" onclick="scrollToSection(event, 'follow')" id="nav-follow" class="nav-link capitalize transition-colors text-neutral-500 dark:text-neutral-400 hover:text-black dark:hover:text-white">
+          Follow
+        </a>
+        <a href="#about" onclick="scrollToSection(event, 'about')" id="nav-about" class="nav-link capitalize transition-colors text-neutral-500 dark:text-neutral-400 hover:text-black dark:hover:text-white">
+          About
+        </a>
+      </nav>
+
+      <!-- Header Right: Action Buttons -->
+      <div class="flex items-center gap-2">
+        <!-- Dark / Light Mode Switcher -->
+        <button
+          id="theme-toggle"
+          aria-label="Toggle Mode"
+          class="p-2 rounded-md transition-all duration-200 border border-neutral-200 dark:border-neutral-800 text-neutral-600 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-900 hover:text-black dark:hover:text-white"
+          title="Beralih Mode Tampilan"
+        >
+          <!-- Sun Icon -->
+          <svg id="sun-icon" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+          </svg>
+          <!-- Moon Icon -->
+          <svg id="moon-icon" class="w-5 h-5 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+          </svg>
+        </button>
+
+        <!-- Share Button -->
+        <button
+          id="share-btn"
+          aria-label="Bagikan Situs"
+          class="p-2 rounded-md transition-all duration-200 border border-neutral-200 dark:border-neutral-800 text-neutral-600 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-900 hover:text-black dark:hover:text-white"
+          title="Bagikan Halaman"
+        >
+          <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
+          </svg>
+        </button>
+
+        <!-- Mobile Hamburger Button -->
+        <button
+          id="menu-btn"
+          aria-label="Buka Menu"
+          class="md:hidden p-2 rounded-md transition-all duration-200 border border-neutral-200 dark:border-neutral-800 text-neutral-600 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-900"
+        >
+          <svg id="menu-icon" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+          <svg id="close-icon" class="w-5 h-5 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Dropdown Navigation -->
+    <div id="mobile-menu" class="hidden md:hidden border-b px-4 py-4 space-y-2 bg-white dark:bg-neutral-950 border-neutral-200 dark:border-neutral-800">
+      <a href="#home" onclick="scrollToSection(event, 'home')" class="mobile-nav-link block w-full text-left px-3 py-2 rounded-md text-sm font-semibold transition-colors bg-neutral-100 text-black dark:bg-neutral-900 dark:text-white font-sans">
+        Home
+      </a>
+      <a href="#follow" onclick="scrollToSection(event, 'follow')" class="mobile-nav-link block w-full text-left px-3 py-2 rounded-md text-sm font-semibold transition-colors text-neutral-500 hover:text-neutral-900 dark:hover:text-white font-sans">
+        Follow
+      </a>
+      <a href="#about" onclick="scrollToSection(event, 'about')" class="mobile-nav-link block w-full text-left px-3 py-2 rounded-md text-sm font-semibold transition-colors text-neutral-500 hover:text-neutral-900 dark:hover:text-white font-sans">
+        About
+      </a>
+    </div>
+  </header>
+
+  <!-- MAIN CONTAINER -->
+  <main class="max-w-4xl mx-auto px-4 sm:px-6 pt-12 pb-24 relative z-10 space-y-24">
+    
+    <!-- SECTION 1: HOME -->
+    <section id="home" class="scroll-mt-24 pt-4">
+      <div class="flex flex-col items-start space-y-6">
+        
+        <!-- Vercel Style Pill Badge -->
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-mono tracking-wider border bg-neutral-100 dark:bg-neutral-900/80 border-neutral-200 dark:border-neutral-800 text-neutral-600 dark:text-neutral-400">
+          <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+          PENULIS FIKSI
+        </div>
+
+        <!-- Profile Avatar & Title Group -->
+        <div class="flex flex-col sm:flex-row items-start sm:items-center gap-6 pt-2">
+          <div class="relative group">
+            <div class="absolute -inset-0.5 bg-gradient-to-r from-neutral-500 to-neutral-800 dark:from-neutral-700 dark:to-neutral-300 rounded-full blur opacity-30 group-hover:opacity-75 transition duration-500"></div>
+            <img 
+              src="https://raw.githubusercontent.com/ezjaa/portfolio/refs/heads/main/public/foto_profile.webp" 
+              alt="Eza Askara Profile Big" 
+              class="relative w-28 h-28 sm:w-32 sm:h-32 rounded-full object-cover border-2 border-neutral-300 dark:border-neutral-700 shadow-xl"
+              onerror="this.src='https://placehold.co/200x200/222/fff?text=Eza+Askara'"
+            />
+          </div>
+
+          <div class="space-y-2">
+            <h1 class="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight text-neutral-900 dark:text-white font-sans">
+              Eza Askara
+            </h1>
+            
+            <!-- Tagline: Lora Italic -->
+            <p class="text-lg sm:text-xl text-neutral-600 dark:text-neutral-400 italic font-serif">
+              “Hanya manusia biasa yang gemar menulis fiksi”
+            </p>
+          </div>
+        </div>
+
+        <!-- Short Intro Text: Lora -->
+        <div class="p-6 sm:p-8 rounded-2xl border leading-relaxed text-base sm:text-lg transition-all bg-white border-neutral-200 text-neutral-700 shadow-sm hover:border-neutral-300 dark:bg-neutral-900/40 dark:border-neutral-800 dark:text-neutral-300 dark:hover:border-neutral-700 font-serif">
+          <p>
+            Eza Askara mulai mengenal dunia kepenulisan ketika duduk di bangku kelas lima—Madrasah Ibtidaiyah. Namun, mulai sering menuangkan imajinasinya semenjak tiga tahun lulus SMK hingga sekarang. Dan kini, ia mulai memberanikan diri untuk mempublikasikan karya-karyanya di platform Wattpad, Tiktok, hingga Instagram. Semoga novel pertamanya yang selalu dinantikan segera lahir dan terbit.
+          </p>
+        </div>
+
+        <!-- Quick Action Buttons -->
+        <div class="flex flex-wrap gap-4 pt-2">
+          <a
+            href="#follow"
+            onclick="scrollToSection(event, 'follow')"
+            class="px-6 py-3 rounded-lg font-semibold text-sm transition-all duration-200 bg-neutral-900 text-white hover:bg-neutral-800 dark:bg-white dark:text-black dark:hover:bg-neutral-200 shadow-md flex items-center gap-2 font-sans"
+          >
+            <span>Lihat Karya & Platform</span>
+            <span class="text-xs">&darr;</span>
+          </a>
+          <a
+            href="#about"
+            onclick="scrollToSection(event, 'about')"
+            class="px-6 py-3 rounded-lg font-semibold text-sm transition-all duration-200 border border-neutral-200 dark:border-neutral-800 text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-900 font-sans"
+          >
+            Baca Perjalanan
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 2: FOLLOW -->
+    <section id="follow" class="scroll-mt-24 space-y-8">
+      <div class="border-b pb-4 border-neutral-200 dark:border-neutral-800 flex items-center justify-between">
+        <h2 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-neutral-900 dark:text-white font-sans">
+          Support & Lihat Karya
+        </h2>
+        <span class="text-xs font-mono text-neutral-500 uppercase tracking-widest">
+          Social Links
+        </span>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        
+        <!-- Wattpad Card -->
+        <a
+          href="https://www.wattpad.com"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="group relative p-6 rounded-xl border transition-all duration-300 flex flex-col justify-between space-y-4 overflow-hidden bg-white border-neutral-200 hover:bg-neutral-50 hover:shadow-md dark:bg-neutral-900/30 dark:border-neutral-800 dark:hover:bg-neutral-900/80 dark:hover:border-neutral-700 hover:border-amber-500/50 hover:text-amber-500"
+        >
+          <div class="flex items-center justify-between">
+            <div class="p-3 rounded-lg bg-neutral-100 dark:bg-neutral-800 text-neutral-900 dark:text-white transition-transform group-hover:scale-110">
+              <svg class="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M11.63 21.31c-.37 0-.74-.08-1.09-.24l-7.25-3.32A2.43 2.43 0 012 15.53V6.26c0-.98.59-1.87 1.49-2.24l7.25-3.02c.57-.24 1.21-.24 1.78 0l7.25 3.02c.9.37 1.49 1.26 1.49 2.24v9.27c0 .98-.59 1.87-1.49 2.24l-7.25 3.32c-.29.13-.6.2-.89.2zm-7.21-5.11l7.13 3.27 7.13-3.27V6.26l-7.13-2.97-7.13 2.97v9.94z"/>
+                <path d="M7.5 8.5L9.8 15h1.9l2.1-5.8 2.1 5.8h1.9l2.3-6.5h-1.8l-1.4 4.5-2.1-5.8h-1.8l-2.1 5.8-1.4-4.5H7.5z"/>
+              </svg>
+            </div>
+          </div>
+          <div>
+            <div class="flex items-center gap-1 font-bold text-xl text-neutral-900 dark:text-white group-hover:translate-x-1 transition-transform font-sans">
+              <span>Wattpad</span>
+              <svg class="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+              </svg>
+            </div>
+          </div>
+          <div class="pt-2 text-xs font-mono text-neutral-400 dark:text-neutral-600 flex items-center justify-between border-t border-neutral-100 dark:border-neutral-800/60">
+            <span>Kunjungi Platform</span>
+            <span>&rarr;</span>
+          </div>
+        </a>
+
+        <!-- TikTok Card -->
+        <a
+          href="https://www.tiktok.com"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="group relative p-6 rounded-xl border transition-all duration-300 flex flex-col justify-between space-y-4 overflow-hidden bg-white border-neutral-200 hover:bg-neutral-50 hover:shadow-md dark:bg-neutral-900/30 dark:border-neutral-800 dark:hover:bg-neutral-900/80 dark:hover:border-neutral-700 hover:border-cyan-500/50 hover:text-cyan-400"
+        >
+          <div class="flex items-center justify-between">
+            <div class="p-3 rounded-lg bg-neutral-100 dark:bg-neutral-800 text-neutral-900 dark:text-white transition-transform group-hover:scale-110">
+              <svg class="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12.525 2.003c1.31 0 2.422.012 3.167.078v3.29h-1.826c-1.393 0-1.84.288-1.84 1.587v2.32h3.585l-.478 3.583h-3.107v9.141c-3.111.41-6.191-1.383-7.01-4.22-.818-2.838.74-5.867 3.633-6.666.867-.24 1.776-.23 2.639.029v3.52c-.378-.182-.8-.258-1.221-.22-.962.087-1.733.856-1.822 1.818-.125 1.348.914 2.483 2.261 2.502 1.23.018 2.28-.922 2.373-2.152v-12.6h3.816z"/>
+              </svg>
+            </div>
+          </div>
+          <div>
+            <div class="flex items-center gap-1 font-bold text-xl text-neutral-900 dark:text-white group-hover:translate-x-1 transition-transform font-sans">
+              <span>Tiktok</span>
+              <svg class="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+              </svg>
+            </div>
+          </div>
+          <div class="pt-2 text-xs font-mono text-neutral-400 dark:text-neutral-600 flex items-center justify-between border-t border-neutral-100 dark:border-neutral-800/60">
+            <span>Kunjungi Platform</span>
+            <span>&rarr;</span>
+          </div>
+        </a>
+
+        <!-- Instagram Card -->
+        <a
+          href="https://www.instagram.com"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="group relative p-6 rounded-xl border transition-all duration-300 flex flex-col justify-between space-y-4 overflow-hidden bg-white border-neutral-200 hover:bg-neutral-50 hover:shadow-md dark:bg-neutral-900/30 dark:border-neutral-800 dark:hover:bg-neutral-900/80 dark:hover:border-neutral-700 hover:border-pink-500/50 hover:text-pink-500"
+        >
+          <div class="flex items-center justify-between">
+            <div class="p-3 rounded-lg bg-neutral-100 dark:bg-neutral-800 text-neutral-900 dark:text-white transition-transform group-hover:scale-110">
+              <svg class="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+              </svg>
+            </div>
+          </div>
+          <div>
+            <div class="flex items-center gap-1 font-bold text-xl text-neutral-900 dark:text-white group-hover:translate-x-1 transition-transform font-sans">
+              <span>Instagram</span>
+              <svg class="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+              </svg>
+            </div>
+          </div>
+          <div class="pt-2 text-xs font-mono text-neutral-400 dark:text-neutral-600 flex items-center justify-between border-t border-neutral-100 dark:border-neutral-800/60">
+            <span>Kunjungi Platform</span>
+            <span>&rarr;</span>
+          </div>
+        </a>
+
+        <!-- Medium Card -->
+        <a
+          href="https://www.medium.com"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="group relative p-6 rounded-xl border transition-all duration-300 flex flex-col justify-between space-y-4 overflow-hidden bg-white border-neutral-200 hover:bg-neutral-50 hover:shadow-md dark:bg-neutral-900/30 dark:border-neutral-800 dark:hover:bg-neutral-900/80 dark:hover:border-neutral-700 hover:border-emerald-500/50 hover:text-emerald-400"
+        >
+          <div class="flex items-center justify-between">
+            <div class="p-3 rounded-lg bg-neutral-100 dark:bg-neutral-800 text-neutral-900 dark:text-white transition-transform group-hover:scale-110">
+              <svg class="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M13.54 12a6.8 6.8 0 01-6.77 6.82A6.8 6.8 0 010 12a6.8 6.8 0 016.77-6.82A6.8 6.8 0 0113.54 12ptM20.96 12c0 3.54-1.51 6.42-3.38 6.42-1.87 0-3.39-2.88-3.39-6.42s1.52-6.42 3.39-6.42c1.87 0 3.38 2.88 3.38 6.42M24 12c0 3.17-.53 5.75-1.19 5.75-.66 0-1.19-2.58-1.19-5.75s.53-5.75 1.19-5.75C23.47 6.25 24 8.83 24 12z"/>
+              </svg>
+            </div>
+          </div>
+          <div>
+            <div class="flex items-center gap-1 font-bold text-xl text-neutral-900 dark:text-white group-hover:translate-x-1 transition-transform font-sans">
+              <span>Medium</span>
+              <svg class="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+              </svg>
+            </div>
+          </div>
+          <div class="pt-2 text-xs font-mono text-neutral-400 dark:text-neutral-600 flex items-center justify-between border-t border-neutral-100 dark:border-neutral-800/60">
+            <span>Kunjungi Platform</span>
+            <span>&rarr;</span>
+          </div>
+        </a>
+
+      </div>
+    </section>
+
+    <!-- SECTION 3: ABOUT -->
+    <section id="about" class="scroll-mt-24 space-y-8">
+      <div class="border-b pb-4 border-neutral-200 dark:border-neutral-800 flex items-center justify-between">
+        <h2 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-neutral-900 dark:text-white font-sans">
+          Kisah & Perjalanan Singkat
+        </h2>
+        <span class="text-xs font-mono text-neutral-500 uppercase tracking-widest">
+          Biography
+        </span>
+      </div>
+
+      <div class="space-y-6">
+        
+        <!-- Timeline Item 1 -->
+        <div class="p-6 sm:p-8 rounded-2xl border transition-all bg-white border-neutral-200 shadow-sm dark:bg-neutral-900/30 dark:border-neutral-800">
+          <div class="flex items-center gap-3 mb-3">
+            <span class="px-2.5 py-0.5 rounded text-xs font-mono font-bold bg-neutral-200 dark:bg-neutral-800 text-neutral-800 dark:text-neutral-200">
+              Awal Mula
+            </span>
+            <span class="text-xs text-neutral-500 font-mono">Madrasah Ibtidaiyah (MI)</span>
+          </div>
+          <p class="text-neutral-700 dark:text-neutral-300 leading-relaxed text-base sm:text-lg font-serif">
+            Eza Askara yang memiliki nama asli Muhamad Reza, pertama kali mengenal dunia kepenulisan cerita fiksi ketika duduk di bangku kelas lima MI (Madrasah Ibtidaiyah). Ia seringkali menuliskan kisah hidup dan karangan pribadi pada buku tulisnya. Selain itu, Eza memiliki hobby menggambar sejak kecil—berawal dari corat-coret tembok, lemari, hingga buku-buku bekas. Bahkan bagian belakang buku tulisnya selama bersekolah, selalu penuh dengan gambar hewan, alam, maupun anime favoritnya.
+          </p>
+        </div>
+
+        <!-- Timeline Item 2 -->
+        <div class="p-6 sm:p-8 rounded-2xl border transition-all bg-white border-neutral-200 shadow-sm dark:bg-neutral-900/30 dark:border-neutral-800">
+          <div class="flex items-center gap-3 mb-3">
+            <span class="px-2.5 py-0.5 rounded text-xs font-mono font-bold bg-neutral-200 dark:bg-neutral-800 text-neutral-800 dark:text-neutral-200">
+              Teknologi & Kreatif
+            </span>
+            <span class="text-xs text-neutral-500 font-mono">Madrasah Tsanawiyah (MTS)</span>
+          </div>
+          <p class="text-neutral-700 dark:text-neutral-300 leading-relaxed text-base sm:text-lg font-serif">
+            Di bangku MTS (Madrasah Tsanawiyah), Eza Askara mulai mengenal dunia Web Development usai dibelikan laptop bekas oleh ayahnya. Ia belajar secara otodidak melalui platform YouTube, dan hanya mengetahui HTML serta CSS—tanpa tahu bahwa karya sederhana yang dibuatnya bisa diakses secara publik di internet. Ia juga memiliki hobby mengedit foto maupun video cinematic, AMV, hingga Motion Graphic.
+          </p>
+        </div>
+
+        <!-- Timeline Item 3 -->
+        <div class="p-6 sm:p-8 rounded-2xl border transition-all bg-white border-neutral-200 shadow-sm dark:bg-neutral-900/30 dark:border-neutral-800">
+          <div class="flex items-center gap-3 mb-3">
+            <span class="px-2.5 py-0.5 rounded text-xs font-mono font-bold bg-neutral-200 dark:bg-neutral-800 text-neutral-800 dark:text-neutral-200">
+              Dunia Jaringan
+            </span>
+            <span class="text-xs text-neutral-500 font-mono">SMK (TKJ)</span>
+          </div>
+          <p class="text-neutral-700 dark:text-neutral-300 leading-relaxed text-base sm:text-lg font-serif">
+            Karena Eza ingin tahu lebih dalam tentang dunia perkodingan ia berencana masuk SMK (Sekolah Menengah Kejuruan). Tapi saat waktu pendaftaran tiba, entah mengapa ia malah mendaftar jurusan Teknik Komputer dan Jaringan (TKJ), padahal pilihan sebelumnya ingin masuk Rekayasa Perangkat Lunak (RPL). Namun justru dari kesalahan itu lah dirinya bisa mengetahui tentang bagaimana suatu web di hosting, mengenal jaringan seperti LAN, WLAN, dan masih banyak lagi. Yang ternyata masih berkaitan erat dengan dunia Web Development.
+          </p>
+        </div>
+
+        <!-- Timeline Item 4 -->
+        <div class="p-6 sm:p-8 rounded-2xl border transition-all bg-white border-neutral-200 shadow-sm dark:bg-neutral-900/30 dark:border-neutral-800">
+          <div class="flex items-center gap-3 mb-3">
+            <span class="px-2.5 py-0.5 rounded text-xs font-mono font-bold bg-neutral-200 dark:bg-neutral-800 text-neutral-800 dark:text-neutral-200">
+              Fokus Saat Ini
+            </span>
+            <span class="text-xs text-neutral-500 font-mono">Karir & Kepenulisan Fiksi</span>
+          </div>
+          <p class="text-neutral-700 dark:text-neutral-300 leading-relaxed text-base sm:text-lg font-serif">
+            Semenjak lulus dan bekerja, Eza belajar lebih dalam lagi mengenai dunia perkodingan langsung otodidak dan membeli kelas online yang tersedia di situs web. Lalu, ia berhasil sedikit menguasai JavaScript, React, Node Js, Express Js, MySQL, dan masih banyak lagi. Tapi Eza malah meninggalkan dunia Web Development, dan berfokus pada dunia kepenulisan fiksi hingga sekarang.
+          </p>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="border-t py-12 transition-colors border-neutral-200 bg-neutral-100 text-neutral-600 dark:border-neutral-800 dark:bg-black dark:text-neutral-400">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 space-y-8">
+      
+      <!-- Top Row -->
+      <div class="flex flex-col sm:flex-row items-center justify-between gap-6 pb-6 border-b border-neutral-200/60 dark:border-neutral-800/60">
+        
+        <!-- Social Media Links -->
+        <div class="flex items-center flex-wrap justify-center gap-4 text-xs font-mono">
+          <a href="https://www.wattpad.com" target="_blank" rel="noopener noreferrer" class="flex items-center gap-1.5 hover:text-amber-500 transition-colors">
+            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M11.63 21.31c-.37 0-.74-.08-1.09-.24l-7.25-3.32A2.43 2.43 0 012 15.53V6.26c0-.98.59-1.87 1.49-2.24l7.25-3.02c.57-.24 1.21-.24 1.78 0l7.25 3.02c.9.37 1.49 1.26 1.49 2.24v9.27c0 .98-.59 1.87-1.49 2.24l-7.25 3.32c-.29.13-.6.2-.89.2zm-7.21-5.11l7.13 3.27 7.13-3.27V6.26l-7.13-2.97-7.13 2.97v9.94z"/>
+              <path d="M7.5 8.5L9.8 15h1.9l2.1-5.8 2.1 5.8h1.9l2.3-6.5h-1.8l-1.4 4.5-2.1-5.8h-1.8l-2.1 5.8-1.4-4.5H7.5z"/>
+            </svg>
+            <span>Wattpad</span>
+          </a>
+          <span class="text-neutral-300 dark:text-neutral-800">•</span>
+          <a href="https://www.tiktok.com" target="_blank" rel="noopener noreferrer" class="flex items-center gap-1.5 hover:text-cyan-400 transition-colors">
+            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12.525 2.003c1.31 0 2.422.012 3.167.078v3.29h-1.826c-1.393 0-1.84.288-1.84 1.587v2.32h3.585l-.478 3.583h-3.107v9.141c-3.111.41-6.191-1.383-7.01-4.22-.818-2.838.74-5.867 3.633-6.666.867-.24 1.776-.23 2.639.029v3.52c-.378-.182-.8-.258-1.221-.22-.962.087-1.733.856-1.822 1.818-.125 1.348.914 2.483 2.261 2.502 1.23.018 2.28-.922 2.373-2.152v-12.6h3.816z"/>
+            </svg>
+            <span>TikTok</span>
+          </a>
+          <span class="text-neutral-300 dark:text-neutral-800">•</span>
+          <a href="https://www.instagram.com" target="_blank" rel="noopener noreferrer" class="flex items-center gap-1.5 hover:text-pink-500 transition-colors">
+            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+            </svg>
+            <span>Instagram</span>
+          </a>
+          <span class="text-neutral-300 dark:text-neutral-800">•</span>
+          <a href="https://www.medium.com" target="_blank" rel="noopener noreferrer" class="flex items-center gap-1.5 hover:text-emerald-400 transition-colors">
+            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M13.54 12a6.8 6.8 0 01-6.77 6.82A6.8 6.8 0 010 12a6.8 6.8 0 016.77-6.82A6.8 6.8 0 0113.54 12ptM20.96 12c0 3.54-1.51 6.42-3.38 6.42-1.87 0-3.39-2.88-3.39-6.42s1.52-6.42 3.39-6.42c1.87 0 3.38 2.88 3.38 6.42M24 12c0 3.17-.53 5.75-1.19 5.75-.66 0-1.19-2.58-1.19-5.75s.53-5.75 1.19-5.75C23.47 6.25 24 8.83 24 12z"/>
+            </svg>
+            <span>Medium</span>
+          </a>
+        </div>
+
+        <!-- Back to Top Button -->
+        <a 
+          href="#home" 
+          onclick="scrollToSection(event, 'home')" 
+          class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg border border-neutral-300 dark:border-neutral-800 bg-white dark:bg-neutral-900 text-xs font-mono font-medium hover:border-neutral-400 dark:hover:border-neutral-700 hover:text-black dark:hover:text-white transition-all shadow-sm group"
+          title="Kembali ke Atas"
+        >
+          <span>Kembali ke Atas</span>
+          <svg class="w-3.5 h-3.5 group-hover:-translate-y-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M5 10l7-7m0 0l7 7m-7-7v18" />
+          </svg>
+        </a>
+      </div>
+
+      <!-- Bottom Row: Copyright Notice -->
+      <div class="flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-mono text-neutral-500 dark:text-neutral-500">
+        <div>
+          <span>Copyright <span id="year">2026</span> Eza Askara. All rights reserved.</span>
+        </div>
+      </div>
+
+    </div>
+  </footer>
+
+  <!-- Custom JavaScript -->
+  <script src="script.js"></script>
+</body>
+</html>
